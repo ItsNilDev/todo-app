@@ -31,16 +31,16 @@ def update() -> None:
         if(cursor_position["first_row"] == True):
             if(cursor_position["position"] == i):
                 try:
-                    table.add_row(f"* [ ] {TODO_items[i]}", f"[X] {DONE_items[i]}")
+                    table.add_row(f"[bold blue] [ ] {TODO_items[i]}", f"[X] {DONE_items[i]}")
                 except:
-                    table.add_row(f"* [ ] {TODO_items[i]}", "")
+                    table.add_row(f"[bold blue] [ ] {TODO_items[i]}", "")
                 continue
         else:
             if(cursor_position["position"] == i):
                 try:
-                    table.add_row(f"[ ] {TODO_items[i]}", f"* [X] {DONE_items[i]}")
+                    table.add_row(f"[ ] {TODO_items[i]}", f"[bold blue] [X] {DONE_items[i]}")
                 except:
-                    table.add_row("", f"* [X] {DONE_items[i]}")
+                    table.add_row("", f"[bold blue] [X] {DONE_items[i]}")
                 continue  
         try: 
             table.add_row(f"[ ] {TODO_items[i]}", f"[X] {DONE_items[i]}")
@@ -56,7 +56,9 @@ def move_to_done(title: str) -> None:
     DONE_items.append(title)
     update()
 
-
+# def return_name_from_position(TODO_items, DONE_items, position) -> title: str:
+#     result_items = []
+#     for i in range(
 
 add_todo_item("buy milk")
 add_done_item("Use a version control")
@@ -84,5 +86,9 @@ while True:
     if keyboard.read_key() == "n":
         cursor_position["first_row"] = True
         update()
+        if keyboard.read_key() == "n":
+        # I want to generate the name with the position number...
+        #cursor_position["
+            pass
 
     
