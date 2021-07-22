@@ -2,8 +2,6 @@ from rich.console import Console
 from rich.table import Table
 import os
 from time import sleep
-# on linux this is shit
-# import keyboard
 from pynput.keyboard import Listener
 
 
@@ -26,7 +24,6 @@ def update() -> None:
     table.add_column("DONE", justify="center", style="cyan", no_wrap=True)
     bigger_number = len(TODO_items) if len(TODO_items) > len(DONE_items) else len(DONE_items)
 
-    # this one has the problem and should be fixed cursor_position is not doing well here, when it goes out of index
     for i in range(0, bigger_number):
         if(cursor_position["first_column"] == True):
             if(cursor_position["position"] == i):
@@ -54,41 +51,31 @@ def update() -> None:
 def move_to_done(title: str) -> None:
     TODO_items.remove(title)
     DONE_items.append(title)
-    update()
 
 def move_to_todo(title: str) -> None:
     DONE_items.remove(title)
     TODO_items.append(title)
-    update()
 
+def remove_from_todo(title: str) -> None:
+    TODO_items.remove(title)
 
-# def return_name_from_position(TODO_items, position) -> str:
-#     result_items = []
-#     count = 0
-#     for i in TODO_items:
-#         try:
-#             result_items.append(TODO_items[co])
-#         except:
-#             break
-#     return result_items[position]
+def remove_from_done(title: str) -> None:
+    DONE_items.remove(title)
 
-add_todo_item("Kharid")
-add_todo_item("Dars")
-add_todo_item("Physic")
-add_todo_item("Math")
-add_todo_item("Class Zaban")
-add_done_item("Ketab Khandan")
-add_done_item("Playing chess as usual")
+add_todo_item("Prove that 2+2")
+add_done_item("Meth")
+add_done_item("buy milk")
 
 update()
 
+# I use colemak.
 def on_press(key):
-    if key.char == "u":
+    if key.char == "i":
         # TODO change 0 if needed
         if(cursor_position["position"] != 0):
             cursor_position["position"] -= 1
         update()
-    if key.char == "e":
+    if key.char == "k":
         if(cursor_position["first_column"]):
             if(cursor_position["position"] != len(TODO_items) - 1):
                 cursor_position["position"] += 1
@@ -96,24 +83,55 @@ def on_press(key):
             if(cursor_position["position"] != len(DONE_items) - 1):
                 cursor_position["position"] += 1
         update()
-    if key.char == "i":
+    if key.char == "l":
         cursor_position["first_column"] = False
         if(cursor_position["position"] > len(DONE_items) - 1):
             cursor_position["position"] = len(DONE_items) - 1
         update()
-    if key.char == "n":
+    if key.char == "j":
         cursor_position["first_column"] = True
         if(cursor_position["position"] > len(TODO_items) - 1):
             cursor_position["position"] = len(TODO_items) - 1
         update()
-    if key.char == "t":
+    if key.char == "f":
         if(cursor_position["first_column"] == True):
-            # Not needed anymore
-            # title = return_name_from_position(TODO_items, cursor_position["position"])
-            # move_to_done(title)
             move_to_done(TODO_items[cursor_position["position"]])
+            if(cursor_position["position"] > len(TODO_items) - 1):
+                if(TODO_items != []):
+                    cursor_position["position"] = len(TODO_items) - 1
+                else:
+                    cursor_position["first_column"] = False
+                    cursor_position["position"] = 0
+            update()
         else:
             move_to_todo(DONE_items[cursor_position["position"]])
+            if(cursor_position["position"] > len(DONE_items) - 1):
+                if(DONE_items != []):
+                    cursor_position["position"] = len(DONE_items) - 1
+                else:
+                    cursor_position["first_column"] = True
+                    cursor_position["position"] = 0
+            update()
+    if key.char == "s":
+        # if(cursor_position["first_column"]):
+        #     remove_from_todo(TODO_items[cursor_position["position"]])
+        #     if(cursor_position["position"] > len(TODO_items) - 1):
+        #         if(TODO_items != []):
+        #             cursor_position["position"] = len(TODO_items) - 1
+        #         else:
+        #             cursor_position["first_column"] = False
+        #             cursor_position["position"] = 0
+        #     update()
+        # if(cursor_position["first_column"] == False):
+        #     remove_from_todo(DONE_items[cursor_position["position"]])
+        #     if(cursor_position["position"] > len(DONE_items) - 1):
+        #         if(DONE_items != []):
+        #             cursor_position["position"] = len(DONE_items) - 1
+        #         else:
+        #             cursor_position["first_column"] = True
+        #             cursor_position["position"] = 0
+        #     update()
+        pass
 
 with Listener(on_press=on_press) as listener:
     listener.join()
